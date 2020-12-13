@@ -5,12 +5,11 @@ pygame.init()
 a, b = 370, 740
 screen = pygame.display.set_mode([a, b])
 pygame.display.set_caption("Swimming fish")
-width = 25
-height = 25
+width = 50
+height = 30
 x, y = 70, b // 2 - height // 2 - 200
 is_jump = False
 jump_count = 6
-del_pixels = []
 
 first_stop = True
 first_run = False
@@ -18,10 +17,9 @@ first_run = False
 sand_pixels = 100
 best_score = 0
 
-enemies = [i * 10 for i in range(9, 34)] + [i * 10 for i in range(13, 26)] + [i * 10 for i in range(19, 31)]
 enemy_count = 1
 enemies_now = []
-enemy_width = 80
+enemy_width = 100
 enemy_distance = 100
 how_enemies_back = 0
 run = True
@@ -31,17 +29,18 @@ fps = 60
 clock = pygame.time.Clock()
 animCount = 0
 
-Motions_picture = [pygame.image.load("1"),
-                   pygame.image.load("2"),
-                   pygame.image.load("3"),
-                   pygame.image.load("4"),
-                   pygame.image.load("5")]
+Motions_picture = [pygame.image.load("Fish_2.jpg"),
+                   pygame.image.load("Fish_2.jpg"),
+                   pygame.image.load("Fish_2.jpg"),
+                   pygame.image.load("Fish_2.jpg"),
+                   pygame.image.load("Fish_2.jpg"),
+                   pygame.image.load("Fish_2.jpg")]
 
-Enemy_picture = [[pygame.image.load("h1"), pygame.image.load("d1"), "1"],
-                 [pygame.image.load("h2"), pygame.image.load("d2"), "2"],
-                 [pygame.image.load("h3"), pygame.image.load("d3"), "3"]]
+Enemy_picture = [[pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470],
+                 [pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470],
+                 [pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470]]
 
-bg = pygame.image.load("back_ground")
+bg = pygame.image.load("bg_2.jpg")
 
 pygame.display.update()
 
@@ -53,7 +52,7 @@ class Enemies:
         self.x_pos_en = x_pos_en
         self.y_pos_en = y_pos_en
 
-    def draw(self, sc):
+    def draw_en(self, sc):
         sc.blit(self.first_en, (self.x_pos_en, 0))
         sc.blit(self.second_en, (self.x_pos_en, self.y_pos_en))
 
@@ -84,10 +83,13 @@ while run:
             enemy_count = 1
             enemy = random.choice(Enemy_picture)
             enemies_now.append(Enemies(enemy[0], enemy[1], a, enemy[2]))
+            print(enemies_now)
 
         for en in enemies_now:
             if a > en.x_pos_en > 0 - enemy_width:
                 en.x_pos_en -= 5
+            else:
+                del enemies_now[enemies_now.index(en)]
 
         if y >= b - height or y <= 0:
             if_life = False
@@ -131,10 +133,16 @@ while run:
 
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
 
+        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
+
+        for i in enemies_now:
+            i.draw_en(screen)
+
         draw_fish(x, y, screen)
 
-        # --------------------------------------------------------------------------------------------------------------
-        # --------------------------------------------------------------------------------------------------------------
+        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
+
+        # проверка на смерть проверка на смерть проверка на смерть проверка на смерть проверка на смерть
 
         for i in enemies_now:
             for r in range(13):
@@ -150,24 +158,7 @@ while run:
                 first_stop = True
                 continue
 
-        # --------------------------------------------------------------------------------------------------------------
-
-        for i in enemies_now:
-            for j in range(i[1], i[1] + enemy_width + width):
-                for r in range(13):
-                    if (x == j - width and y == i[0] - r) or (x == j - width and y == i[0] + 200 + r - height):
-                        if_life = False
-                        first_stop = True
-                        continue
-
-            for j in range(i[0]):
-                if (x == i[1] - width and y == j) or (x == i[1] - width and y == j + i[0] + 200):
-                    if_life = False
-                    first_stop = True
-                    continue
-
-        # --------------------------------------------------------------------------------------------------------------
-        # --------------------------------------------------------------------------------------------------------------
+        # проверка на смерть проверка на смерть проверка на смерть проверка на смерть проверка на смерть
 
         pygame.display.update()
 
@@ -184,7 +175,7 @@ while run:
             text1 = font1.render("Play", True, (50, 255, 50))
             text_w = text1.get_width()
             text_h = text1.get_height()
-            text_x, text_y = width // 2 + a // 2 - text_w // 2 - 15, height // 2 + b // 2
+            text_x, text_y = a // 2 - text_w // 2, height // 2 + b // 2
             screen.blit(text1, (text_x, text_y))
             pygame.draw.rect(screen, (0, 255, 0), (text_x - 10, text_y - 10,
                                                    text_w + 20, text_h + 20), 3)
