@@ -89,26 +89,6 @@ while run:
             if a > en.x_pos_en > 0 - enemy_width:
                 en.x_pos_en -= 5
 
-        # --------------------------------------------------------------------------------------------------------------
-        # --------------------------------------------------------------------------------------------------------------
-
-        for i in enemies_now:
-            for j in range(i[1], i[1] + enemy_width + width):
-                for r in range(13):
-                    if (x == j - width and y == i[0] - r) or (x == j - width and y == i[0] + 200 + r - height):
-                        if_life = False
-                        first_stop = True
-                        continue
-
-            for j in range(i[0]):
-                if (x == i[1] - width and y == j) or (x == i[1] - width and y == j + i[0] + 200):
-                    if_life = False
-                    first_stop = True
-                    continue
-
-        # --------------------------------------------------------------------------------------------------------------
-        # --------------------------------------------------------------------------------------------------------------
-
         if y >= b - height or y <= 0:
             if_life = False
             first_stop = True
@@ -133,7 +113,7 @@ while run:
 
         # прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок
 
-        if x in [i.x_pos_en[1] + enemy_width for i in enemies_now]:
+        if x in [i.x_pos_en + enemy_width for i in enemies_now]:
             how_enemies_back += 1
 
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
@@ -152,6 +132,42 @@ while run:
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
 
         draw_fish(x, y, screen)
+
+        # --------------------------------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------------------------------
+
+        for i in enemies_now:
+            for r in range(13):
+                if x in range(i.x_pos_en, i.x_pos_en + enemy_width) and (y == i.y_pos_en - 200 - r or
+                                                                         y == i.y_pos_en + r):
+                    if_life = False
+                    first_stop = True
+                    continue
+
+            if x == i.x_pos_en - width and (y in range(0, i.y_pos_en - 200) or
+                                            y in range(i.y_pos_en, b)):
+                if_life = False
+                first_stop = True
+                continue
+
+        # --------------------------------------------------------------------------------------------------------------
+
+        for i in enemies_now:
+            for j in range(i[1], i[1] + enemy_width + width):
+                for r in range(13):
+                    if (x == j - width and y == i[0] - r) or (x == j - width and y == i[0] + 200 + r - height):
+                        if_life = False
+                        first_stop = True
+                        continue
+
+            for j in range(i[0]):
+                if (x == i[1] - width and y == j) or (x == i[1] - width and y == j + i[0] + 200):
+                    if_life = False
+                    first_stop = True
+                    continue
+
+        # --------------------------------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------------------------------
 
         pygame.display.update()
 
