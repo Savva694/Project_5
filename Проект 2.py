@@ -7,7 +7,7 @@ screen = pygame.display.set_mode([a, b])
 pygame.display.set_caption("Swimming fish")
 width = 50
 height = 30
-x, y = 70, b // 2 - height // 2 - 200
+x, y = 72, b // 2 - height // 2 - 200
 is_jump = False
 jump_count = 6
 
@@ -79,14 +79,14 @@ while run:
         enemy_count += 1
 
         if enemy_count % enemy_distance == 0:
-            enemy_distance = 60
+            enemy_distance = 80
             enemy_count = 1
             enemy = random.choice(Enemy_picture)
             enemies_now.append(Enemies(enemy[0], enemy[1], a, enemy[2]))
 
         for en in enemies_now:
             if a >= en.x_pos_en >= 0 - enemy_width:
-                en.x_pos_en -= 5
+                en.x_pos_en -= 4
             else:
                 del enemies_now[enemies_now.index(en)]
 
@@ -133,11 +133,11 @@ while run:
         text_x3, text_y3 = 5, 5
         text_w3 = text3.get_width()
         text_h3 = text3.get_height()
-        screen.blit(text3, (text_x3, text_y3))
         pygame.draw.rect(screen, (100, 100, 100), (0, 0,
                                                    text_w3 + 10, text_h3 + 10))
         pygame.draw.rect(screen, (0, 0, 0), (0, 0,
                                              text_w3 + 10, text_h3 + 10), 1)
+        screen.blit(text3, (text_x3, text_y3))
 
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
 
@@ -151,6 +151,7 @@ while run:
                     first_stop = True
                     continue
 
+            print(i.x_pos_en)
             if x == i.x_pos_en - width and (y in range(0, i.y_pos_en - 200) or
                                             y in range(i.y_pos_en, b)):
                 if_life = False
@@ -163,7 +164,7 @@ while run:
 
     else:
         if first_stop:
-            screen.fill((100, 100, 100))
+            screen.fill((120, 120, 120))
             first_stop = False
             first_run = True
 
@@ -184,8 +185,6 @@ while run:
             text_x3, text_y3 = 5, 5
             text_w3 = text3.get_width()
             text_h3 = text3.get_height()
-            pygame.draw.rect(screen, (100, 100, 100), (0, 0,
-                                                       text_w3 + 10, text_h3 + 10))
             screen.blit(text3, (text_x3, text_y3))
 
             font2 = pygame.font.Font(None, 40)
@@ -203,10 +202,9 @@ while run:
                 pos = event.pos
                 if pos[0] in [i for i in range(text_x - 10, text_x - 10 + text_w + 20)] and \
                         pos[1] in [i for i in range(text_y - 10, text_y - 10 + text_h + 20)]:
-                    x, y = 70, b // 2 - height // 2 - 200
+                    x, y = 72, b // 2 - height // 2 - 200
                     is_jump = False
                     jump_count = 6
-                    del_pixels = []
                     enemies_now = []
                     if_life = True
 
