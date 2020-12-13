@@ -36,9 +36,9 @@ Motions_picture = [pygame.image.load("Fish_2.jpg"),
                    pygame.image.load("Fish_2.jpg"),
                    pygame.image.load("Fish_2.jpg")]
 
-Enemy_picture = [[pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470],
-                 [pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470],
-                 [pygame.image.load("tube_1.1png.jpg"), pygame.image.load("tube_1.2png.jpg"), 470]]
+Enemy_picture = [[pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470],
+                 [pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470],
+                 [pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470]]
 
 bg = pygame.image.load("bg_2.jpg")
 
@@ -83,10 +83,9 @@ while run:
             enemy_count = 1
             enemy = random.choice(Enemy_picture)
             enemies_now.append(Enemies(enemy[0], enemy[1], a, enemy[2]))
-            print(enemies_now)
 
         for en in enemies_now:
-            if a > en.x_pos_en > 0 - enemy_width:
+            if a >= en.x_pos_en >= 0 - enemy_width:
                 en.x_pos_en -= 5
             else:
                 del enemies_now[enemies_now.index(en)]
@@ -118,6 +117,15 @@ while run:
         if x in [i.x_pos_en + enemy_width for i in enemies_now]:
             how_enemies_back += 1
 
+        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
+
+        for i in enemies_now:
+            i.draw_en(screen)
+
+        draw_fish(x, y, screen)
+
+        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
+
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
 
         font3 = pygame.font.Font(None, 40)
@@ -132,15 +140,6 @@ while run:
                                              text_w3 + 10, text_h3 + 10), 1)
 
         # текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
-
-        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
-
-        for i in enemies_now:
-            i.draw_en(screen)
-
-        draw_fish(x, y, screen)
-
-        # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
 
         # проверка на смерть проверка на смерть проверка на смерть проверка на смерть проверка на смерть
 
