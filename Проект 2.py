@@ -1,13 +1,14 @@
 import pygame
 import random
+import os
 
 pygame.init()
 a, b = 370, 740
 screen = pygame.display.set_mode([a, b])
 pygame.display.set_caption("Swimming fish")
-width = 50
-height = 30
-x, y = 72, b // 2 - height // 2 - 200
+width = 49
+height = 35
+x, y = 73, b // 2 - height // 2 - 200
 is_jump = False
 jump_count = 6
 
@@ -29,18 +30,24 @@ fps = 60
 clock = pygame.time.Clock()
 animCount = 0
 
-Motions_picture = [pygame.image.load("Fish_2.jpg"),
-                   pygame.image.load("Fish_2.jpg"),
-                   pygame.image.load("Fish_2.jpg"),
-                   pygame.image.load("Fish_2.jpg"),
-                   pygame.image.load("Fish_2.jpg"),
-                   pygame.image.load("Fish_2.jpg")]
 
-Enemy_picture = [[pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470],
-                 [pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470],
-                 [pygame.image.load("tube_1.1.jpg"), pygame.image.load("tube_1.2.jpg"), 470]]
+def load_image(name):
+    fullname = os.path.join("data", name)
+    image = pygame.image.load(fullname)
+    image.set_colorkey(-1)
+    return image
 
-bg = pygame.image.load("bg_2.jpg")
+
+Motions_picture = [load_image("bird_1.png"),
+                   load_image("bird_2.png"),
+                   load_image("bird_1.png"),
+                   load_image("bird_3.png")]
+
+Enemy_picture = [[load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470],
+                 [load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470],
+                 [load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470]]
+
+bg = pygame.image.load("bg_3.jpg")
 
 pygame.display.update()
 
@@ -60,7 +67,7 @@ class Enemies:
 def draw_fish(x_pos_f, y_pos_f, sc):
     global animCount
     animCount += 1
-    if animCount >= 60:
+    if animCount >= 40:
         animCount = 0
     sc.blit(Motions_picture[animCount // 10], (x_pos_f, y_pos_f))
 
@@ -144,16 +151,23 @@ while run:
         # проверка на смерть проверка на смерть проверка на смерть проверка на смерть проверка на смерть
 
         for i in enemies_now:
-            for r in range(13):
-                if x in range(i.x_pos_en, i.x_pos_en + enemy_width) and (y == i.y_pos_en - 200 - r or
-                                                                         y == i.y_pos_en + r):
-                    if_life = False
-                    first_stop = True
-                    continue
+            fake_jump_count = jump_count + 0.5
+            if x in range(i.x_pos_en - width, i.x_pos_en + enemy_width) and \
+                    ((y > i.y_pos_en > y - (fake_jump_count ** 2) // 4) or
+                     (y < i.y_pos_en - 200 < y + (fake_jump_count ** 2) // 4)):
+                if_life = False
+                first_stop = True
+                continue
 
-            print(i.x_pos_en)
+            # for r in range(13):
+            #    if x in range(i.x_pos_en, i.x_pos_en + enemy_width) and (y == i.y_pos_en - 200 - r or
+            #                                                             y == i.y_pos_en - r):
+            #        if_life = False
+            #        first_stop = True
+            #        continue
+
             if x == i.x_pos_en - width and (y in range(0, i.y_pos_en - 200) or
-                                            y in range(i.y_pos_en, b)):
+                                            y in range(i.y_pos_en - height, b)):
                 if_life = False
                 first_stop = True
                 continue
@@ -202,7 +216,7 @@ while run:
                 pos = event.pos
                 if pos[0] in [i for i in range(text_x - 10, text_x - 10 + text_w + 20)] and \
                         pos[1] in [i for i in range(text_y - 10, text_y - 10 + text_h + 20)]:
-                    x, y = 72, b // 2 - height // 2 - 200
+                    x, y = 73, b // 2 - height // 2 - 200
                     is_jump = False
                     jump_count = 6
                     enemies_now = []
