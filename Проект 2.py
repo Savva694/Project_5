@@ -3,12 +3,12 @@ import random
 import os
 
 pygame.init()
-a, b = 370, 740
+a, b, c = 370, 740, 322
 screen = pygame.display.set_mode([a, b])
-pygame.display.set_caption("Swimming fish")
+pygame.display.set_caption("Flappy Bird")
 width = 49
 height = 35
-x, y = 73, b // 2 - height // 2 - 200
+x, y = 70, b // 2 - height // 2 - 200  # x = 70
 is_jump = False
 jump_count = 6
 
@@ -43,13 +43,28 @@ Motions_picture = [load_image("bird_1.png"),
                    load_image("bird_1.png"),
                    load_image("bird_3.png")]
 
-Enemy_picture = [[load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470],
-                 [load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470],
-                 [load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 470]]
+Enemy_picture = [[load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 440],
+                 [load_image("tube_2.1.jpg"), load_image("tube_2.2.jpg"), 470],
+                 [load_image("tube_3.1.jpg"), load_image("tube_3.2.jpg"), 500],
+                 [load_image("tube_4.1.jpg"), load_image("tube_4.2.jpg"), 410],
+                 [load_image("tube_5.1.jpg"), load_image("tube_5.2.jpg"), 530],
+                 [load_image("tube_6.1.jpg"), load_image("tube_6.2.jpg"), 380],
+                 [load_image("tube_7.1.jpg"), load_image("tube_7.2.jpg"), 560]]
 
 bg = pygame.image.load("bg_3.jpg")
+bg2 = pygame.image.load("bg_1.jpg")
 
 pygame.display.update()
+
+# музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка
+
+
+sound1 = pygame.mixer.Sound("die.wav")
+sound2 = pygame.mixer.Sound("point.wav")
+sound3 = pygame.mixer.Sound("wing.wav")
+
+
+# музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка музыка
 
 
 class Enemies:
@@ -98,6 +113,7 @@ while run:
                 del enemies_now[enemies_now.index(en)]
 
         if y >= b - height or y <= 0:
+            sound1.play()
             if_life = False
             first_stop = True
             continue
@@ -105,6 +121,7 @@ while run:
         # прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок
 
         if keys[pygame.K_SPACE]:
+            sound3.play()
             is_jump = True
             jump_count = 6
 
@@ -114,14 +131,12 @@ while run:
             y += (jump_count ** 2) // 4
         else:
             y -= (jump_count ** 2) // 4
-        if jump_count <= 2 or jump_count >= -2:
-            jump_count -= 0.5
-        else:
-            jump_count -= 0.5
+        jump_count -= 0.5
 
         # прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок прыжок
 
         if x in [i.x_pos_en + enemy_width for i in enemies_now]:
+            sound2.play()
             how_enemies_back += 1
 
         # отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка отрисовка
@@ -153,23 +168,18 @@ while run:
         for i in enemies_now:
             fake_jump_count = jump_count + 0.5
             if x in range(i.x_pos_en - width, i.x_pos_en + enemy_width) and \
-                    ((y > i.y_pos_en > y - (fake_jump_count ** 2) // 4) or
-                     (y < i.y_pos_en - 200 < y + (fake_jump_count ** 2) // 4)):
+                    ((y > i.y_pos_en > y - ((jump_count - 0.5) ** 2) // 4) or
+                     (y < i.y_pos_en - 200 < y + ((jump_count + 0.5) ** 2) // 4)):
+                sound1.play()
                 if_life = False
                 first_stop = True
                 continue
 
-            # for r in range(13):
-            #    if x in range(i.x_pos_en, i.x_pos_en + enemy_width) and (y == i.y_pos_en - 200 - r or
-            #                                                             y == i.y_pos_en - r):
-            #        if_life = False
-            #        first_stop = True
-            #        continue
-
-            if x == i.x_pos_en - width and (y in range(0, i.y_pos_en - 200) or
-                                            y in range(i.y_pos_en - height, b)):
+            if x - 1 == i.x_pos_en - width and (y in range(0, i.y_pos_en - 200) or
+                                                y in range(i.y_pos_en - height, b)):
                 if_life = False
                 first_stop = True
+                sound1.play()
                 continue
 
         # проверка на смерть проверка на смерть проверка на смерть проверка на смерть проверка на смерть
@@ -178,7 +188,7 @@ while run:
 
     else:
         if first_stop:
-            screen.fill((120, 120, 120))
+            screen.blit(bg, (0, 0))
             first_stop = False
             first_run = True
 
@@ -189,10 +199,10 @@ while run:
             text1 = font1.render("Play", True, (50, 255, 50))
             text_w = text1.get_width()
             text_h = text1.get_height()
-            text_x, text_y = a // 2 - text_w // 2, height // 2 + b // 2
+            text_x, text_y = a // 2 - text_w // 2, height // 2 + b // 2 - 20
             screen.blit(text1, (text_x, text_y))
-            pygame.draw.rect(screen, (0, 255, 0), (text_x - 10, text_y - 10,
-                                                   text_w + 20, text_h + 20), 3)
+            pygame.draw.rect(screen, (50, 255, 50), (text_x - 10, text_y - 10,
+                                                     text_w + 20, text_h + 20), 4)
 
             font3 = pygame.font.Font(None, 40)
             text3 = font3.render("Score: " + str(how_enemies_back), True, (50, 255, 50))
@@ -216,7 +226,7 @@ while run:
                 pos = event.pos
                 if pos[0] in [i for i in range(text_x - 10, text_x - 10 + text_w + 20)] and \
                         pos[1] in [i for i in range(text_y - 10, text_y - 10 + text_h + 20)]:
-                    x, y = 73, b // 2 - height // 2 - 200
+                    x, y = 70, b // 2 - height // 2 - 200
                     is_jump = False
                     jump_count = 6
                     enemies_now = []
