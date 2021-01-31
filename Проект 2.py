@@ -52,7 +52,6 @@ Enemy_picture = [[load_image("tube_1.1.jpg"), load_image("tube_1.2.jpg"), 440],
                  [load_image("tube_7.1.jpg"), load_image("tube_7.2.jpg"), 560]]
 
 bg = pygame.image.load("bg_3.jpg")
-bg2 = pygame.image.load("bg_1.jpg")
 
 pygame.display.update()
 
